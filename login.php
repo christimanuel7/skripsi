@@ -1,3 +1,26 @@
+<?php
+    require 'fungsi.php';
+
+    if(isset($_POST['login'])){
+        $uname=$_POST['username'];
+        $pass=$_POST['password'];
+        $dataPengguna=mysqli_query($conn,"SELECT * FROM tbpengguna WHERE username='$uname' AND password='$pass'");
+        $row=mysqli_fetch_array($dataPengguna);
+
+        $_SESSION['username']=$row['username'];
+        $_SESSION['password']=$row['password'];
+        $_SESSION['namaPengguna']=$row['namaPengguna'];
+        $jabatan=$row['jabatan'];
+        if($uname==$_SESSION['username'] && $_SESSION['password']){
+            $_SESSION['jabatan']=$jabatan;
+            header('location:index.php');
+        }
+        else{
+            echo 'LOGIN GAGAL';
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +41,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/sb-admin-2.css" rel="stylesheet">
 
 </head>
 
@@ -41,41 +64,19 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form method="post">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <input type="text" class="form-control form-control-user" aria-describedby="emailHelp" name="username" placeholder="Masukkan Username Anda">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" class="form-control form-control-user" name="password" placeholder="Masukkan Password Anda">
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <Button name="login" class="btn btn-primary btn-user btn-block" style="margin-top:200px;">
                                             Login
-                                        </a>
+                                        </Button>
                                         <hr>
-                                        <a href="index.html" class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Login with Google
-                                        </a>
-                                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
                                     </form>
                                     <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +88,6 @@
         </div>
 
     </div>
-
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
